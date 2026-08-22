@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
 import VideoPlayer from './VideoPlayer';
+import YouTubePlayer from './YouTubePlayer';
 
 // ── Floating decoration configs ───────────────────────────────────────────────
 const FLOATERS = [
@@ -82,6 +83,7 @@ export default function Home() {
   const [yesScale, setYesScale] = useState(1);
   const [noScale, setNoScale]   = useState(1);
   const [noMsg, setNoMsg]       = useState('');
+  const [ytVideoId, setYtVideoId]           = useState(null); // Menyimpan ID video YouTube (null = tertutup)
   const [happyParticles, setHappyParticles] = useState([]);
   const [sadParticles, setSadParticles]     = useState([]);
   const [videoSrc, setVideoSrc]             = useState(null); // null = closed
@@ -206,16 +208,13 @@ export default function Home() {
               ))}
             </div>
             <div className={styles.flowerRow}>🌸🌺🌷🌼🌸🌺🌷🌼🌸</div>
-            <a
+            <button
               id="watch-yes-video-button"
               className={styles.videoBtn}
-              href="/video-yes.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}
+              onClick={() => setYtVideoId('ZSG4DYuApVo')}
             >
               🎥 Video maaf saya kak Yol :)
-            </a>
+            </button>
             <button
               id="back-from-happy-button"
               className={styles.backBtn}
@@ -251,16 +250,13 @@ export default function Home() {
             <p className={styles.sadSub}>Sorry... gak sopan 😔</p>
             <p className={styles.sadNote}>I hope one day you&apos;ll forgive me</p>
             <p className={styles.sadNote}>I&apos;ll keep waiting for you... 🌧️</p>
-            <a
+            <button
               id="watch-no-video-button"
               className={`${styles.videoBtn} ${styles.videoBtnSad}`}
-              href="/video-no.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}
+              onClick={() => setYtVideoId('JWZ33kvB6zI')}
             >
               🎥 Video maaf saya kak Yol :(
-            </a>
+            </button>
             <button
               id="back-button"
               className={styles.backBtn}
@@ -338,6 +334,14 @@ export default function Home() {
             ))}
           </div>
         </div>
+      )}
+
+      {/* ═══════════════ YOUTUBE PLAYER MODAL ═══════════════ */}
+      {ytVideoId && (
+        <YouTubePlayer
+          videoId={ytVideoId}
+          onClose={() => setYtVideoId(null)}
+        />
       )}
 
     </div>
