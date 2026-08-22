@@ -282,7 +282,7 @@ export default function Home() {
             <div className={styles.cardTopDeco}>🌸 ✨ 🌸</div>
 
             <h1 className={styles.title}>
-              Sorry yah Yola 🙏
+              Sorry yah Yola
             </h1>
             <p className={styles.subtitle}>please forgive me</p>
 
