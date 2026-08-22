@@ -17,11 +17,10 @@ export default function VideoPlayer({ src, onClose }) {
   const hideTimer = useRef(null);
   const wrapRef = useRef(null);
 
-  // Auto-play on mount
+  // Hapus Auto-play untuk mencegah desync di HP. 
+  // User harus menekan tombol Play di tengah layar, sehingga video sempat buffering.
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.play().then(() => setPlaying(true)).catch(() => {});
+    // Tidak ada auto-play
   }, []);
 
   // Track fullscreen change from browser
