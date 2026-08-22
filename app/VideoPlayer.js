@@ -17,24 +17,11 @@ export default function VideoPlayer({ src, onClose }) {
   const hideTimer = useRef(null);
   const wrapRef = useRef(null);
 
-  // Auto-play on mount, waiting for enough data to prevent audio desync
+  // Auto-play on mount
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-
-    const tryPlay = () => {
-      v.play().then(() => setPlaying(true)).catch(() => {});
-    };
-
-    if (v.readyState >= 3) { // HAVE_FUTURE_DATA
-      tryPlay();
-    } else {
-      v.addEventListener('canplay', tryPlay);
-    }
-
-    return () => {
-      v.removeEventListener('canplay', tryPlay);
-    };
+    v.play().then(() => setPlaying(true)).catch(() => {});
   }, []);
 
   // Track fullscreen change from browser
