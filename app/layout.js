@@ -1,7 +1,7 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'I\'m Sorry Yola 💕',
+  title: 'I\'m Sorry Yola',
   description: 'A heartfelt apology from the bottom of my heart',
 };
 

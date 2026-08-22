@@ -209,7 +209,7 @@ export default function Home() {
             <button
               id="watch-yes-video-button"
               className={styles.videoBtn}
-              onClick={() => setVideoSrc('/video-yes.mp4')}
+              onClick={() => setVideoSrc('https://drive.google.com/file/d/1vGZQE89TBm2bsJY_FO8vTR-fp1lAHDVx/view?usp=sharing')}
             >
               🎥 Video maaf saya kak Yol :)
             </button>

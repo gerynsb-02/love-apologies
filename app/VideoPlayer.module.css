@@ -189,3 +189,88 @@
   .wrap { width: 96vw; border-radius: 14px; }
   .volSlider { width: 50px; }
 }
+
+/* ── Google Drive iframe embed ───────────────────────────────────────── */
+.driveIframe {
+  display: block;
+  width: 100%;
+  height: 70vh;
+  border: none;
+  background: #000;
+}
+
+.fullscreenWrap .driveIframe {
+  height: 100vh;
+}
+
+.iframeVisible {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.iframeHidden {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ── Loading spinner ─────────────────────────────────────────────────── */
+.iframeLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  gap: 1rem;
+  background: #111;
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 107, 157, 0.2);
+  border-top-color: #ff6b9d;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingText {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ── Drive fullscreen button ─────────────────────────────────────────── */
+.driveFullscreenBtn {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  transition: background 0.2s;
+}
+.driveFullscreenBtn:hover { background: rgba(255, 107, 157, 0.55); }
+
+@media (max-width: 600px) {
+  .driveIframe { height: 56vw; min-height: 200px; }
+  .iframeLoading { height: 56vw; min-height: 200px; }
+}
+
