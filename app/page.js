@@ -178,8 +178,8 @@ export default function Home() {
       ))}
 
       {/* ═══════════════ HAPPY SCENE ═══════════════ */}
-      {scene === 'happy' && (
-        <div className={styles.happyScene} style={{ display: videoSrc ? 'none' : 'flex' }}>
+      {scene === 'happy' && !videoSrc && (
+        <div className={styles.happyScene}>
           {happyParticles.map(p => (
             <span
               key={p.id}
@@ -225,8 +225,8 @@ export default function Home() {
       )}
 
       {/* ═══════════════ SAD SCENE ═══════════════ */}
-      {scene === 'sad' && (
-        <div className={styles.sadScene} style={{ display: videoSrc ? 'none' : 'flex' }}>
+      {scene === 'sad' && !videoSrc && (
+        <div className={styles.sadScene}>
           {sadParticles.map(p => (
             <span
               key={p.id}
@@ -267,8 +267,8 @@ export default function Home() {
       )}
 
       {/* ═══════════════ MAIN SCENE ═══════════════ */}
-      {scene === 'main' && (
-        <div className={styles.mainContent} style={{ display: videoSrc ? 'none' : 'flex' }}>
+      {scene === 'main' && !videoSrc && (
+        <div className={styles.mainContent}>
 
           {/* Cute bear / character */}
           <div className={styles.characterWrap}>
