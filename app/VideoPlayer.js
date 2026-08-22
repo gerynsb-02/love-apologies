@@ -3,17 +3,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import styles from './VideoPlayer.module.css';
 
-// Helper: detect if src is a Google Drive URL and return embed URL
-function getDriveEmbedUrl(src) {
-  if (!src) return null;
-  // Match pattern: drive.google.com/file/d/FILE_ID/...
-  const match = src.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if (match) {
-    return `https://drive.google.com/file/d/${match[1]}/preview`;
-  }
-  return null;
-}
-
 export default function VideoPlayer({ src, onClose }) {
   const videoRef = useRef(null);
   const progressRef = useRef(null);
@@ -25,21 +14,15 @@ export default function VideoPlayer({ src, onClose }) {
   const [muted, setMuted] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
-  const [iframeLoaded, setIframeLoaded] = useState(false);
   const hideTimer = useRef(null);
   const wrapRef = useRef(null);
 
-  // Check if this is a Google Drive URL
-  const driveEmbedUrl = getDriveEmbedUrl(src);
-  const isGoogleDrive = !!driveEmbedUrl;
-
-  // Auto-play on mount (only for local video)
+  // Auto-play on mount
   useEffect(() => {
-    if (isGoogleDrive) return;
     const v = videoRef.current;
     if (!v) return;
     v.play().then(() => setPlaying(true)).catch(() => {});
-  }, [isGoogleDrive]);
+  }, []);
 
   // Track fullscreen change from browser
   useEffect(() => {
@@ -165,50 +148,7 @@ export default function VideoPlayer({ src, onClose }) {
 
   const progress = duration ? (currentTime / duration) * 100 : 0;
 
-  // ── Google Drive Embed Render ─────────────────────────────────────────────────
-  if (isGoogleDrive) {
-    return (
-      <div className={styles.overlay} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-        <div
-          ref={wrapRef}
-          className={`${styles.wrap} ${fullscreen ? styles.fullscreenWrap : ''}`}
-        >
-          {/* Close button */}
-          <button className={styles.closeBtn} onClick={onClose} title="Tutup">✕</button>
-
-          {/* Loading indicator */}
-          {!iframeLoaded && (
-            <div className={styles.iframeLoading}>
-              <div className={styles.loadingSpinner} />
-              <p className={styles.loadingText}>Loading video...</p>
-            </div>
-          )}
-
-          {/* Google Drive iframe embed */}
-          <iframe
-            src={driveEmbedUrl}
-            className={`${styles.driveIframe} ${iframeLoaded ? styles.iframeVisible : styles.iframeHidden}`}
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            onLoad={() => setIframeLoaded(true)}
-            title="Video Player"
-            frameBorder="0"
-          />
-
-          {/* Fullscreen button for the wrapper */}
-          <button
-            className={styles.driveFullscreenBtn}
-            onClick={toggleFullscreen}
-            title="Fullscreen"
-          >
-            ⛶ <span style={{ fontSize: '0.7rem' }}>{fullscreen ? 'exit' : 'full'}</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Local Video Render ────────────────────────────────────────────────────────
+  // ── Render ────────────────────────────────────────────────────────────────────
   return (
     <div className={styles.overlay} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div
