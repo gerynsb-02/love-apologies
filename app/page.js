@@ -206,13 +206,16 @@ export default function Home() {
               ))}
             </div>
             <div className={styles.flowerRow}>🌸🌺🌷🌼🌸🌺🌷🌼🌸</div>
-            <button
+            <a
               id="watch-yes-video-button"
               className={styles.videoBtn}
-              onClick={() => setVideoSrc('/video-yes.mp4')}
+              href="/video-yes.mp4"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}
             >
               🎥 Video maaf saya kak Yol :)
-            </button>
+            </a>
             <button
               id="back-from-happy-button"
               className={styles.backBtn}
@@ -248,13 +251,16 @@ export default function Home() {
             <p className={styles.sadSub}>Sorry... gak sopan 😔</p>
             <p className={styles.sadNote}>I hope one day you&apos;ll forgive me</p>
             <p className={styles.sadNote}>I&apos;ll keep waiting for you... 🌧️</p>
-            <button
+            <a
               id="watch-no-video-button"
               className={`${styles.videoBtn} ${styles.videoBtnSad}`}
-              onClick={() => setVideoSrc('/video-no.mp4')}
+              href="/video-no.mp4"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}
             >
               🎥 Video maaf saya kak Yol :(
-            </button>
+            </a>
             <button
               id="back-button"
               className={styles.backBtn}
@@ -332,14 +338,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-      )}
-
-      {/* ═══════════════ VIDEO PLAYER MODAL ═══════════════ */}
-      {videoSrc && (
-        <VideoPlayer
-          src={videoSrc}
-          onClose={() => setVideoSrc(null)}
-        />
       )}
 
     </div>
