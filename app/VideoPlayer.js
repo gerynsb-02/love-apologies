@@ -20,7 +20,13 @@ export default function VideoPlayer({ src, onClose }) {
   // Hapus Auto-play untuk mencegah desync di HP. 
   // User harus menekan tombol Play di tengah layar, sehingga video sempat buffering.
   useEffect(() => {
-    // Tidak ada auto-play
+    const v = videoRef.current;
+    if (!v) return;
+    
+    // Trik "Warm Up" decoder HP:
+    // Paksa video meloncat ke detik 0.1 agar browser memuat dan men-decode frame pertama ke memori (RAM/GPU).
+    // Ini sangat membantu di iOS dan Android agar tidak terjadi lag saat ditekan Play.
+    v.currentTime = 0.1;
   }, []);
 
   // Track fullscreen change from browser
