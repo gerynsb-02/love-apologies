@@ -180,7 +180,7 @@ export default function Home() {
       {/* ═══════════════ HAPPY SCENE ═══════════════ */}
       {scene === 'happy' && (
         <div className={styles.happyScene}>
-          {happyParticles.map(p => (
+          {!videoSrc && happyParticles.map(p => (
             <span
               key={p.id}
               className={styles.happyParticle}
@@ -202,10 +202,10 @@ export default function Home() {
             <p className={styles.happySub}>Makasih udah maafin, janji gak bakal ku ulang :)</p>
             <div className={styles.heartRow}>
               {['🌸', '✨', '🌷', '🌺', '🌼'].map((h, i) => (
-                <span key={i} className={styles.heartBounce} style={{ animationDelay: `${i * 0.15}s` }}>{h}</span>
+                <span key={i} className={styles.heartBounce} style={{ animationDelay: `${i * 0.15}s`, animationPlayState: videoSrc ? 'paused' : 'running' }}>{h}</span>
               ))}
             </div>
-            <div className={styles.flowerRow}>🌸🌺🌷🌼🌸🌺🌷🌼🌸</div>
+            <div className={styles.flowerRow} style={{ animationPlayState: videoSrc ? 'paused' : 'running' }}>🌸🌺🌷🌼🌸🌺🌷🌼🌸</div>
             <button
               id="watch-yes-video-button"
               className={styles.videoBtn}
@@ -227,7 +227,7 @@ export default function Home() {
       {/* ═══════════════ SAD SCENE ═══════════════ */}
       {scene === 'sad' && (
         <div className={styles.sadScene}>
-          {sadParticles.map(p => (
+          {!videoSrc && sadParticles.map(p => (
             <span
               key={p.id}
               className={styles.sadParticle}
