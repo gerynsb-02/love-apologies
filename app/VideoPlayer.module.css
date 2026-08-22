@@ -1,0 +1,191 @@
+/* ── Overlay / modal background ─────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease both;
+  backdrop-filter: blur(6px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Player wrapper ──────────────────────────────────────────────────── */
+.wrap {
+  position: relative;
+  width: min(90vw, 820px);
+  background: #111;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 32px 80px rgba(0,0,0,0.6),
+    0 0 0 1.5px rgba(255,180,210,0.25);
+  animation: popIn 0.35s cubic-bezier(.34,1.56,.64,1) both;
+  user-select: none;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.fullscreenWrap {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+}
+
+/* ── Video ───────────────────────────────────────────────────────────── */
+.video {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #000;
+  cursor: pointer;
+}
+
+.fullscreenWrap .video {
+  max-height: 100vh;
+  height: 100vh;
+}
+
+/* ── Close button ────────────────────────────────────────────────────── */
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 20;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.closeBtn:hover { background: rgba(255,107,157,0.7); }
+
+/* ── Controls overlay ────────────────────────────────────────────────── */
+.controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.6rem 1rem 0.8rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: opacity 0.35s ease;
+}
+
+.visible { opacity: 1; pointer-events: all; }
+.hidden  { opacity: 0; pointer-events: none; }
+
+/* ── Progress bar ────────────────────────────────────────────────────── */
+.progressBar {
+  position: relative;
+  height: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.progressBg {
+  position: absolute;
+  left: 0; right: 0;
+  height: 4px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 4px;
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b9d, #c9184a);
+  border-radius: 4px;
+  transition: width 0.08s linear;
+}
+
+.progressThumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255,107,157,0.7);
+  transition: left 0.08s linear;
+  pointer-events: none;
+}
+
+/* ── Bottom row ──────────────────────────────────────────────────────── */
+.bottomRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ctrlBtn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.15rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+.ctrlBtn:hover { opacity: 0.75; }
+
+.volSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 70px;
+  height: 4px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+.volSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.timeLabel {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.85);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-left: 2px;
+  flex: 1;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .wrap { width: 96vw; border-radius: 14px; }
+  .volSlider { width: 50px; }
+}

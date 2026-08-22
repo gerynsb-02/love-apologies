@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --pink-light: #ffe0ec;
+  --pink-mid: #ffb3cc;
+  --pink-deep: #ff6b9d;
+  --pink-dark: #c9184a;
+  --rose: #ff4d6d;
+  --cream: #fff5f8;
+  --gold: #ffd700;
+  --purple: #c77dff;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Nunito', sans-serif;
+  overflow-x: hidden;
+}
+
+body {
+  background: linear-gradient(135deg, #ffe0ec 0%, #ffc2d4 30%, #ffb3cc 60%, #ff9dc8 100%);
+  background-attachment: fixed;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--pink-light); }
+::-webkit-scrollbar-thumb { background: var(--pink-deep); border-radius: 10px; }
