@@ -6,8 +6,11 @@ import styles from './VideoPlayer.module.css';
 export default function VideoPlayer({ src, onClose }) {
   const videoRef = useRef(null);
   const progressRef = useRef(null);
+  const progressFillRef = useRef(null);
+  const progressThumbRef = useRef(null);
+  const timeLabelRef = useRef(null);
+  
   const [playing, setPlaying] = useState(false);
-  const [currentTime, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -16,18 +19,6 @@ export default function VideoPlayer({ src, onClose }) {
   const [showControls, setShowControls] = useState(true);
   const hideTimer = useRef(null);
   const wrapRef = useRef(null);
-
-  // Hapus Auto-play untuk mencegah desync di HP. 
-  // User harus menekan tombol Play di tengah layar, sehingga video sempat buffering.
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    
-    // Trik "Warm Up" decoder HP:
-    // Paksa video meloncat ke detik 0.1 agar browser memuat dan men-decode frame pertama ke memori (RAM/GPU).
-    // Ini sangat membantu di iOS dan Android agar tidak terjadi lag saat ditekan Play.
-    v.currentTime = 0.1;
-  }, []);
 
   // Track fullscreen change from browser
   useEffect(() => {
@@ -58,14 +49,37 @@ export default function VideoPlayer({ src, onClose }) {
     return `${m}:${sec}`;
   };
 
+  const updateProgressUI = useCallback(() => {
+    const v = videoRef.current;
+    if (!v || !duration) return;
+    const progress = (v.currentTime / duration) * 100;
+    if (progressFillRef.current) progressFillRef.current.style.width = `${progress}%`;
+    if (progressThumbRef.current) progressThumbRef.current.style.left = `${progress}%`;
+    if (timeLabelRef.current) timeLabelRef.current.innerText = `${fmt(v.currentTime)} / ${fmt(duration)}`;
+  }, [duration]);
+
+  // RAF loop for smooth high-performance UI updates without React state lag
+  useEffect(() => {
+    let raf;
+    const loop = () => {
+      if (playing && !dragging) {
+        updateProgressUI();
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [playing, dragging, updateProgressUI]);
+
   const seekTo = useCallback((clientX) => {
     const bar = progressRef.current;
-    if (!bar || !videoRef.current) return;
+    const v = videoRef.current;
+    if (!bar || !v || !duration) return;
     const rect = bar.getBoundingClientRect();
     const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
-    videoRef.current.currentTime = ratio * duration;
-    setCurrent(ratio * duration);
-  }, [duration]);
+    v.currentTime = ratio * duration;
+    updateProgressUI();
+  }, [duration, updateProgressUI]);
 
   // ── Handlers ─────────────────────────────────────────────────────────────────
   const togglePlay = () => {
@@ -76,13 +90,11 @@ export default function VideoPlayer({ src, onClose }) {
     resetHideTimer();
   };
 
-  const onTimeUpdate = () => {
-    const v = videoRef.current;
-    if (!dragging && v) setCurrent(v.currentTime);
-  };
-
   const onLoaded = () => {
-    if (videoRef.current) setDuration(videoRef.current.duration);
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
+      updateProgressUI();
+    }
   };
 
   const onEnded = () => setPlaying(false);
@@ -151,8 +163,6 @@ export default function VideoPlayer({ src, onClose }) {
     resetHideTimer();
   };
 
-  const progress = duration ? (currentTime / duration) * 100 : 0;
-
   // ── Render ────────────────────────────────────────────────────────────────────
   return (
     <div className={styles.overlay} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
@@ -170,7 +180,6 @@ export default function VideoPlayer({ src, onClose }) {
           ref={videoRef}
           src={src}
           className={styles.video}
-          onTimeUpdate={onTimeUpdate}
           onLoadedMetadata={onLoaded}
           onEnded={onEnded}
           onClick={togglePlay}
@@ -189,8 +198,8 @@ export default function VideoPlayer({ src, onClose }) {
             onTouchStart={onBarTouchStart}
           >
             <div className={styles.progressBg} />
-            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
-            <div className={styles.progressThumb} style={{ left: `${progress}%` }} />
+            <div ref={progressFillRef} className={styles.progressFill} style={{ width: '0%' }} />
+            <div ref={progressThumbRef} className={styles.progressThumb} style={{ left: '0%' }} />
           </div>
 
           {/* Bottom row */}
@@ -214,7 +223,7 @@ export default function VideoPlayer({ src, onClose }) {
             />
 
             {/* Time */}
-            <span className={styles.timeLabel}>{fmt(currentTime)} / {fmt(duration)}</span>
+            <span ref={timeLabelRef} className={styles.timeLabel}>0:00 / 0:00</span>
 
             {/* Fullscreen */}
             <button className={styles.ctrlBtn} onClick={toggleFullscreen} title="Fullscreen">
