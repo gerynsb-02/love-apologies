@@ -179,8 +179,8 @@ export default function Home() {
 
       {/* ═══════════════ HAPPY SCENE ═══════════════ */}
       {scene === 'happy' && (
-        <div className={styles.happyScene}>
-          {!videoSrc && happyParticles.map(p => (
+        <div className={styles.happyScene} style={{ display: videoSrc ? 'none' : 'flex' }}>
+          {happyParticles.map(p => (
             <span
               key={p.id}
               className={styles.happyParticle}
@@ -202,10 +202,10 @@ export default function Home() {
             <p className={styles.happySub}>Makasih udah maafin, janji gak bakal ku ulang :)</p>
             <div className={styles.heartRow}>
               {['🌸', '✨', '🌷', '🌺', '🌼'].map((h, i) => (
-                <span key={i} className={styles.heartBounce} style={{ animationDelay: `${i * 0.15}s`, animationPlayState: videoSrc ? 'paused' : 'running' }}>{h}</span>
+                <span key={i} className={styles.heartBounce} style={{ animationDelay: `${i * 0.15}s` }}>{h}</span>
               ))}
             </div>
-            <div className={styles.flowerRow} style={{ animationPlayState: videoSrc ? 'paused' : 'running' }}>🌸🌺🌷🌼🌸🌺🌷🌼🌸</div>
+            <div className={styles.flowerRow}>🌸🌺🌷🌼🌸🌺🌷🌼🌸</div>
             <button
               id="watch-yes-video-button"
               className={styles.videoBtn}
@@ -226,8 +226,8 @@ export default function Home() {
 
       {/* ═══════════════ SAD SCENE ═══════════════ */}
       {scene === 'sad' && (
-        <div className={styles.sadScene}>
-          {!videoSrc && sadParticles.map(p => (
+        <div className={styles.sadScene} style={{ display: videoSrc ? 'none' : 'flex' }}>
+          {sadParticles.map(p => (
             <span
               key={p.id}
               className={styles.sadParticle}
@@ -268,7 +268,7 @@ export default function Home() {
 
       {/* ═══════════════ MAIN SCENE ═══════════════ */}
       {scene === 'main' && (
-        <div className={styles.mainContent}>
+        <div className={styles.mainContent} style={{ display: videoSrc ? 'none' : 'flex' }}>
 
           {/* Cute bear / character */}
           <div className={styles.characterWrap}>
