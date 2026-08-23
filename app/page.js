@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
 import VideoPlayer from './VideoPlayer';
-import YouTubePlayer from './YouTubePlayer';
 
 // ── Floating decoration configs ───────────────────────────────────────────────
 const FLOATERS = [
@@ -83,7 +82,7 @@ export default function Home() {
   const [yesScale, setYesScale] = useState(1);
   const [noScale, setNoScale]   = useState(1);
   const [noMsg, setNoMsg]       = useState('');
-  const [ytVideoId, setYtVideoId]           = useState(null); // null = tertutup
+  const [videoSrc, setVideoSrc]             = useState(null); // null = tertutup
   const [happyParticles, setHappyParticles] = useState([]);
   const [sadParticles, setSadParticles]     = useState([]);
 
@@ -91,17 +90,17 @@ export default function Home() {
   const happyAudio = useSegmentAudio('/semenjak-ada-dirimu.mp3', 30, 60);
   const sadAudio   = useSegmentAudio('/gurun-hujan.mp3', 52, 83);
 
-  // Pause music when YouTube video opens, resume when video closes
+  // Pause music when video opens, resume when video closes
   useEffect(() => {
     const audio = scene === 'happy' ? happyAudio : scene === 'sad' ? sadAudio : null;
     if (!audio) return;
-    if (ytVideoId) {
+    if (videoSrc) {
       audio.pause();
     } else {
       audio.resume();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ytVideoId, scene]);
+  }, [videoSrc, scene]);
 
   // Generate particle arrays once
   useEffect(() => {
@@ -179,7 +178,7 @@ export default function Home() {
       ))}
 
       {/* ═══════════════ HAPPY SCENE ═══════════════ */}
-      {scene === 'happy' && !ytVideoId && (
+      {scene === 'happy' && !videoSrc && (
         <div className={styles.happyScene}>
           {happyParticles.map(p => (
             <span
@@ -210,7 +209,7 @@ export default function Home() {
             <button
               id="watch-yes-video-button"
               className={styles.videoBtn}
-              onClick={() => { happyAudio.pause(); setYtVideoId('ZSG4DYuApVo'); }}
+              onClick={() => { happyAudio.pause(); setVideoSrc('/video-yes.mp4'); }}
             >
               🎥 Video maaf saya kak Yol :)
             </button>
@@ -226,7 +225,7 @@ export default function Home() {
       )}
 
       {/* ═══════════════ SAD SCENE ═══════════════ */}
-      {scene === 'sad' && !ytVideoId && (
+      {scene === 'sad' && !videoSrc && (
         <div className={styles.sadScene}>
           {sadParticles.map(p => (
             <span
@@ -252,7 +251,7 @@ export default function Home() {
             <button
               id="watch-no-video-button"
               className={`${styles.videoBtn} ${styles.videoBtnSad}`}
-              onClick={() => { sadAudio.pause(); setYtVideoId('JWZ33kvB6zI'); }}
+              onClick={() => { sadAudio.pause(); setVideoSrc('/video-no-original.mp4'); }}
             >
               🎥 Video maaf saya kak Yol :(
             </button>
@@ -268,7 +267,7 @@ export default function Home() {
       )}
 
       {/* ═══════════════ MAIN SCENE ═══════════════ */}
-      {scene === 'main' && !ytVideoId && (
+      {scene === 'main' && !videoSrc && (
         <div className={styles.mainContent}>
 
           {/* Cute bear / character */}
@@ -335,11 +334,11 @@ export default function Home() {
         </div>
       )}
 
-      {/* ═══════════════ YOUTUBE PLAYER MODAL ═══════════════ */}
-      {ytVideoId && (
-        <YouTubePlayer
-          videoId={ytVideoId}
-          onClose={() => setYtVideoId(null)}
+      {/* ═══════════════ VIDEO PLAYER MODAL ═══════════════ */}
+      {videoSrc && (
+        <VideoPlayer
+          src={videoSrc}
+          onClose={() => setVideoSrc(null)}
         />
       )}
 

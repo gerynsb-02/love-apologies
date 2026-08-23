@@ -5,28 +5,49 @@ import styles from './VideoPlayer.module.css';
 
 export default function VideoPlayer({ src, onClose }) {
   const videoRef = useRef(null);
-  const wrapRef = useRef(null);
 
-  const onEnded = () => {
-    // Optionally close or do something when ended
+  // Autoplay saat overlay terbuka
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.play().catch(() => {});
+  }, [src]);
+
+  // Hentikan video saat overlay ditutup
+  const handleClose = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+    onClose();
   };
 
   return (
-    <div className={styles.overlay} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div ref={wrapRef} className={styles.wrap}>
-        {/* Close button */}
-        <button className={styles.closeBtn} onClick={onClose} title="Tutup">?</button>
+    <div
+      className={styles.overlay}
+      onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
+    >
+      <div className={styles.wrap}>
+        {/* Tombol Tutup */}
+        <button className={styles.closeBtn} onClick={handleClose} title="Tutup">✕</button>
 
-        {/* Video element using Native Controls for perfect A/V sync on mobile */}
+        {/* Tombol Download */}
+        <a
+          href={src}
+          download
+          className={styles.downloadBtn}
+          title="Download video"
+        >
+          ⬇️ Download
+        </a>
+
+        {/* Video native — A/V sync sempurna, bisa fullscreen */}
         <video
           ref={videoRef}
           src={src}
           className={styles.video}
-          onEnded={onEnded}
           playsInline
           controls
-          controlsList="nodownload"
-          preload="metadata"
+          preload="auto"
         />
       </div>
     </div>
